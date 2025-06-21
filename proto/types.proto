@@ -1,12 +1,46 @@
 syntax = "proto3";
 
 package openroute;
+import "google/protobuf/timestamp.proto";
 option go_package = "openRoute/orpb";
 
-message NumberRequest {
-  int32 value = 1;
+message Uuid {
+  string value = 1;
 }
 
-message NumberResponse {
-  string message = 1;
+// Core route structure
+message Route {
+  double start_lat = 1;
+  double start_lng = 2;
+  double end_lat = 3;
+  double end_lng = 4;
+  // google.protobuf.Timestamp leave_at = 5;
+}
+
+// Proposal submitted by a user
+message Proposal {
+  Uuid id = 1;
+  Route route = 2;
+  string user_id = 3;
+  // google.protobuf.Timestamp created_at = 4;
+  enum State {
+    CANCELED = 0;
+    APPROVED = 1;
+  }
+  State state = 5;
+}
+
+message User {
+  Uuid id = 1;
+  string username = 2;
+  google.protobuf.Timestamp created_at = 3;
+}
+
+message RegisterUserReq {
+  string username = 1;
+}
+
+message CreateProposalReq {
+  Route route = 1;
+  Uuid user_id = 2;
 }

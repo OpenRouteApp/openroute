@@ -1,13 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>gRPC-Web Client</title>
+  <title>gRPC-Web User Demo</title>
 </head>
 <body>
-  <h1>Send a Number</h1>
-  <input type="number" id="numberInput">
-  <button id="sendBtn">Send</button>
-  <p id="response"></p>
-  <script src="main.js"></script>
+  <h2>Register User</h2>
+  <input type="text" id="usernameInput" placeholder="Username">
+  <button id="registerBtn">Register</button>
+  <p id="registerResult"></p>
+
+  <h2>Get User</h2>
+  <input type="text" id="userIdInput" placeholder="User ID">
+  <button id="getUserBtn">Get User</button>
+  <p id="getUserResult"></p>
+
+  <h2>Create Proposal</h2>
+  <input type="text" id="proposalUserId" placeholder="User ID">
+  <input type="number" id="startLat" placeholder="Start Latitude">
+  <input type="number" id="startLng" placeholder="Start Longitude">
+  <input type="number" id="endLat" placeholder="End Latitude">
+  <input type="number" id="endLng" placeholder="End Longitude">
+  <button id="createProposalBtn">Create Proposal</button>
+  <p id="proposalResult"></p>
+
+  <h2>Get Proposal</h2>
+  <input type="text" id="proposalIdInput" placeholder="Proposal ID">
+  <button id="getProposalBtn">Get Proposal</button>
+  <p id="getProposalResult"></p>
+
+
+  <script src="main.js" type="module"></script>
 </body>
 </html>

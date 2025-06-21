@@ -5,6 +5,12 @@ option go_package = "openRoute/orpb";
 
 import "types.proto";
 
-service NumberService {
-  rpc SendNumber(NumberRequest) returns (NumberResponse);
+service ProposalService {
+  rpc CreateProposal(CreateProposalReq) returns (Uuid);
+  rpc GetProposal(Uuid) returns (Proposal);
+}
+
+service UserService {
+  rpc RegisterUser(RegisterUserReq) returns (User);
+  rpc GetUser(Uuid) returns (User);
 }
