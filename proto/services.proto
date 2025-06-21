@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package openroute;
+option go_package = "openRoute/orpb";
+
+import "types.proto";
+
+service NumberService {
+  rpc SendNumber(NumberRequest) returns (NumberResponse);
+}

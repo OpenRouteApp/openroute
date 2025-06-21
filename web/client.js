@@ -1,5 +1,4 @@
-import { NumberRequest } from './generated/number_pb.js';
-import { NumberServiceClient } from './generated/number_grpc_web_pb.js';
+import { NumberRequest, NumberServiceClient } from './generated/index.js';
 
 const client = new NumberServiceClient('http://localhost:8080');
 

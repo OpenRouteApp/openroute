@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package openroute;
+option go_package = "openRoute/orpb";
+
+message NumberRequest {
+  int32 value = 1;
+}
+
+message NumberResponse {
+  string message = 1;
+}

@@ -7,7 +7,7 @@ import (
 	"net"
 
 	"google.golang.org/grpc"
-	pb "openRoute/numberpb"
+	pb "openRoute/orpb"
 )
 
 type server struct {

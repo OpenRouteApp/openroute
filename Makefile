@@ -1,28 +1,54 @@
-.PHONY: proto build up down clean
+.PHONY: all proto build webpack up down clean
 
-PROTO_DIR=proto
-OUT_DIR=server/numberpb
+# Directories
+PROTO_DIR := proto
+GO_OUT_DIR := server/orpb
+WEB_OUT_DIR := web/generated
 
-proto:
-	mkdir -p $(OUT_DIR)
+# Files
+PROTO_FILES := $(PROTO_DIR)/types.proto $(PROTO_DIR)/services.proto
+DESCRIPTOR_FILE := openroute.pb
+
+# Tools
+PROTOC := protoc
+
+all: proto webpack build
+
+proto: $(GO_OUT_DIR) $(WEB_OUT_DIR)
 	protoc -I=$(PROTO_DIR) \
-		--go_out=$(OUT_DIR) \
-		--go-grpc_out=$(OUT_DIR) \
+		--go_out=$(GO_OUT_DIR) \
+		--go-grpc_out=$(GO_OUT_DIR) \
 		--go_opt=paths=source_relative \
 		--go-grpc_opt=paths=source_relative \
-		$(PROTO_DIR)/number.proto
+		$(PROTO_FILES)
 
-	mkdir -p web/generated
 	protoc -I=$(PROTO_DIR) \
-		--js_out=import_style=commonjs:web/generated \
-		--grpc-web_out=import_style=commonjs,mode=grpcwebtext:web/generated \
-		$(PROTO_DIR)/number.proto
+		--js_out=import_style=commonjs:$(WEB_OUT_DIR) \
+		--grpc-web_out=import_style=commonjs,mode=grpcwebtext:$(WEB_OUT_DIR) \
+		$(PROTO_FILES)
 
 	protoc -I=$(PROTO_DIR) \
 		--include_imports \
 		--include_source_info \
-		--descriptor_set_out=number.pb \
-		$(PROTO_DIR)/number.proto
+		--descriptor_set_out=$(DESCRIPTOR_FILE) \
+		$(PROTO_FILES)
+
+	@echo "// Auto-generated index.js" > $(WEB_OUT_DIR)/index.js && \
+	for f in $(WEB_OUT_DIR)/*.js; do \
+		base=$$(basename $$f); \
+		if [ "$$base" != "index.js" ]; then \
+			echo "export * from './$$base';" >> $(WEB_OUT_DIR)/index.js; \
+		fi; \
+	done
+
+webpack:
+	cd web && npx webpack 
+
+$(GO_OUT_DIR):
+	mkdir -p $(GO_OUT_DIR)
+
+$(WEB_OUT_DIR):
+	mkdir -p $(WEB_OUT_DIR)
 
 build:
 	docker-compose build
@@ -34,4 +60,4 @@ down:
 	docker-compose down
 
 clean:
-	rm -rf $(OUT_DIR)/*.pb.go number.pb
+	rm -rf $(GO_OUT_DIR)/*.pb.go $(DESCRIPTOR_FILE)

@@ -12,7 +12,7 @@ services:
       - "8080:8080"
     volumes:
       - ./envoy.yaml:/etc/envoy/envoy.yaml
-      - ./number.pb:/etc/envoy/number.pb
+      - ./openroute.pb:/etc/envoy/openroute.pb
     depends_on:
       - server
 
