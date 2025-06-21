@@ -1,0 +1,24 @@
+services:
+  server:
+    build: 
+      context: .
+      dockerfile: ./server/Dockerfile
+    ports:
+      - "50051:50051"
+
+  envoy:
+    image: envoyproxy/envoy:v1.29-latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./envoy.yaml:/etc/envoy/envoy.yaml
+      - ./number.pb:/etc/envoy/number.pb
+    depends_on:
+      - server
+
+  web:
+    build: ./web
+    ports:
+      - "80:80"
+    depends_on:
+      - envoy

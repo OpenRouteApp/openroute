@@ -1,0 +1,16 @@
+# === Node.js ===
+web/node_modules/
+web/package-lock.json
+
+# === gRPC / Protobuf ===
+**/*.pb.go
+**/*_grpc.pb.go
+web/generated/
+**/*.pb
+
+
+# === Webpack / Build ===
+web/dist/
+web/*.bundle.js
+web/*.map
+web/*.cache/
