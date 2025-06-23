@@ -6,6 +6,7 @@ option go_package = "openRoute/orpb";
 
 message Uuid {
   string value = 1;
+  string encrypted_payload = 2; // NEKRONOS: Is there any better way to do this?
 }
 
 // Core route structure
@@ -38,6 +39,7 @@ message User {
 
 message RegisterUserReq {
   string username = 1;
+  string encrypted_payload = 2; // NEKRONOS: Is there any better way to do this?
 }
 
 message CreateProposalReq {
