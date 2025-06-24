@@ -3,14 +3,19 @@ web/node_modules/
 web/package-lock.json
 
 # === gRPC / Protobuf ===
-**/*.pb.go
-**/*_grpc.pb.go
+**/proto/
+!/proto/
 web/generated/
+web/dist/
 **/*.pb
 
+# === Rust / Go =========
+**/target/
+**/bin/
 
 # === Webpack / Build ===
 web/dist/
+web/descriptors/
 web/*.bundle.js
 web/*.map
 web/*.cache/

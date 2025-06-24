@@ -1,18 +1,17 @@
 import {
   UserServiceClient,
   ProposalServiceClient,
-} from './generated/index.js';
-
-import {
   RegisterUserReq,
   Uuid,
   CreateProposalReq,
   Route,
-} from './generated/index.js';
-
+  VoteServiceClient 
+} from './dist/index.js';
 
 const userClient = new UserServiceClient('http://localhost:8080');
 const proposalClient = new ProposalServiceClient('http://localhost:8080');
+const voteClient = new VoteServiceClient('http://localhost:8080');
+
 
 // Register user
 document.getElementById('registerBtn').addEventListener('click', () => {
@@ -41,7 +40,7 @@ document.getElementById('getUserBtn').addEventListener('click', () => {
     if (err) {
       output.textContent = 'Error: ' + err.message;
     } else {
-      output.textContent = `User: ${res.getUsername()} (created at ${new Date(res.getCreatedAt().getSeconds() * 1000).toLocaleString()})`;
+      output.textContent = `User: ${res.getUsername()}`;
     }
   });
 });
@@ -95,9 +94,31 @@ document.getElementById('getProposalBtn').addEventListener('click', () => {
   });
 });
 
-function dateToTimestamp(date) {
-  const ts = new Timestamp();
-  ts.setSeconds(Math.floor(date.getTime() / 1000));
-  ts.setNanos((date.getTime() % 1000) * 1e6);
-  return ts;
-}
+document.getElementById('startBtn').addEventListener('click', () => {
+  voteClient.start(new Uuid(), {}, (err, res) => {
+    const output = document.getElementById('startResult');
+    if (err) {
+      output.textContent = 'Error: ' + err.message;
+    } else {
+      output.textContent = `Start returned value: ${res.getValue()}`;
+    }
+  });
+});
+
+document.getElementById('getRoutesBtn').addEventListener('click', () => {
+  voteClient.getRoutes(new Uuid(), {}, (err, res) => {
+    const output = document.getElementById('getRoutesResult');
+    if (err) {
+      output.textContent = 'Error: ' + err.message;
+    } else {
+      const routes = res.getRoutesList();
+      if (!routes.length) {
+        output.textContent = 'No routes found.';
+        return;
+      }
+      output.innerHTML = routes.map(r => {
+        return `(${r.getStartLat()}, ${r.getStartLng()}) → (${r.getEndLat()}, ${r.getEndLng()})`;
+      }).join('<br>');
+    }
+  });
+});

@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
-	pb "openRoute/orpb"
+	pb "server/proto"
 )
 
 func (s *server) CreateProposal(ctx context.Context, req *pb.CreateProposalReq) (*pb.Uuid, error) {

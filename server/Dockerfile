@@ -4,8 +4,6 @@ WORKDIR /app
 
 COPY . .
 
-WORKDIR /app/server
-
 RUN go mod tidy && go build -o server .
 
 EXPOSE 50051

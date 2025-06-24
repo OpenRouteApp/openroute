@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package server;
+option go_package = "./proto;proto";
+
+import "types.proto";
+
+service ProposalService {
+  rpc CreateProposal(CreateProposalReq) returns (types.Uuid);
+  rpc GetProposal(types.Uuid) returns (types.Proposal);
+}
+
+service UserService {
+  rpc RegisterUser(RegisterUserReq) returns (types.User);
+  rpc GetUser(types.Uuid) returns (types.User);
+}
+
+
+message RegisterUserReq {
+  string username = 1;
+}
+
+message CreateProposalReq {
+  types.Route route = 1;
+  types.Uuid user_id = 2;
+}

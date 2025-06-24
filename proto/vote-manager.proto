@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package votemanager;
+import "types.proto";
+
+service VoteService {
+  rpc Start(types.Empty) returns (StartResponse);
+  rpc GetRoutes(types.Empty) returns (GetRoutesResponse);
+}
+
+
+message StartResponse {
+  int32 value = 1;
+}
+
+message GetRoutesResponse {
+  repeated types.Route routes = 1;
+}

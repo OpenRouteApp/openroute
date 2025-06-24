@@ -24,19 +24,50 @@ static_resources:
                     - name: backend
                       domains: ["*"]
                       routes:
-                      - match: { prefix: "/" }
-                        route:
-                          cluster: grpc_server
-                        typed_per_filter_config:
-                          envoy.filters.http.cors:
-                            "@type": type.googleapis.com/envoy.extensions.filters.http.cors.v3.CorsPolicy
-                            allow_origin_string_match:
-                              - exact: "http://localhost"
-                            allow_methods: "GET, POST, OPTIONS"
-                            allow_headers: "keep-alive,user-agent,cache-control,content-type,content-transfer-encoding,x-accept-content-transfer-encoding,x-accept-response-streaming,x-user-agent,x-grpc-web"
-                            expose_headers: "grpc-status,grpc-message"
-                            max_age: "1728000"
-                            allow_credentials: true
+                        - match:
+                            prefix: "/server.UserService/"
+                          route:
+                            cluster: server
+                          typed_per_filter_config:
+                            envoy.filters.http.cors:
+                              "@type": type.googleapis.com/envoy.extensions.filters.http.cors.v3.CorsPolicy
+                              allow_origin_string_match:
+                                - exact: "http://localhost"
+                              allow_methods: "GET, POST, OPTIONS"
+                              allow_headers: "keep-alive,user-agent,cache-control,content-type,content-transfer-encoding,x-accept-content-transfer-encoding,x-accept-response-streaming,x-user-agent,x-grpc-web"
+                              expose_headers: "grpc-status,grpc-message"
+                              max_age: "1728000"
+                              allow_credentials: true
+                        - match:
+                            prefix: "/server.ProposalService/"
+                          route:
+                            cluster: server
+                          typed_per_filter_config:
+                            envoy.filters.http.cors:
+                              "@type": type.googleapis.com/envoy.extensions.filters.http.cors.v3.CorsPolicy
+                              allow_origin_string_match:
+                                - exact: "http://localhost"
+                              allow_methods: "GET, POST, OPTIONS"
+                              allow_headers: "keep-alive,user-agent,cache-control,content-type,content-transfer-encoding,x-accept-content-transfer-encoding,x-accept-response-streaming,x-user-agent,x-grpc-web"
+                              expose_headers: "grpc-status,grpc-message"
+                              max_age: "1728000"
+                              allow_credentials: true
+
+                        - match:
+                            prefix: "/votemanager.VoteService/"
+                          route:
+                            cluster: vote_manager
+                          typed_per_filter_config:
+                            envoy.filters.http.cors:
+                              "@type": type.googleapis.com/envoy.extensions.filters.http.cors.v3.CorsPolicy
+                              allow_origin_string_match:
+                                - exact: "http://localhost"
+                              allow_methods: "GET, POST, OPTIONS"
+                              allow_headers: "keep-alive,user-agent,cache-control,content-type,content-transfer-encoding,x-accept-content-transfer-encoding,x-accept-response-streaming,x-user-agent,x-grpc-web"
+                              expose_headers: "grpc-status,grpc-message"
+                              max_age: "1728000"
+                              allow_credentials: true
+
                 http_filters:
                   - name: envoy.filters.http.grpc_web
                     typed_config:
@@ -49,7 +80,7 @@ static_resources:
                       "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
 
   clusters:
-    - name: grpc_server
+    - name: server
       connect_timeout: 0.25s
       type: LOGICAL_DNS
       lb_policy: ROUND_ROBIN
@@ -59,11 +90,30 @@ static_resources:
           explicit_http_config:
             http2_protocol_options: {}
       load_assignment:
-        cluster_name: grpc_server
+        cluster_name: server
         endpoints:
           - lb_endpoints:
               - endpoint:
                   address:
                     socket_address:
                       address: server
+                      port_value: 50051
+
+    - name: vote_manager
+      connect_timeout: 0.25s
+      type: LOGICAL_DNS
+      lb_policy: ROUND_ROBIN
+      typed_extension_protocol_options:
+        envoy.extensions.upstreams.http.v3.HttpProtocolOptions:
+          "@type": type.googleapis.com/envoy.extensions.upstreams.http.v3.HttpProtocolOptions
+          explicit_http_config:
+            http2_protocol_options: {}
+      load_assignment:
+        cluster_name: vote_manager
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: vote-manager
                       port_value: 50051
