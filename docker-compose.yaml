@@ -1,10 +1,13 @@
 services:
   server:
-    build: 
-      context: .
-      dockerfile: ./server/Dockerfile
+    build: ./server
     ports:
-      - "50051:50051"
+      - "50051"
+
+  vote-manager:
+    build: ./vote-manager
+    ports:
+      - "50051"
 
   envoy:
     image: envoyproxy/envoy:v1.29-latest
@@ -12,7 +15,7 @@ services:
       - "8080:8080"
     volumes:
       - ./envoy.yaml:/etc/envoy/envoy.yaml
-      - ./openroute.pb:/etc/envoy/openroute.pb
+      - ./web/descriptors/services.pb:/etc/envoy/services.pb
     depends_on:
       - server
 

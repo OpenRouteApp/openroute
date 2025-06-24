@@ -1,12 +1,13 @@
 syntax = "proto3";
 
-package openroute;
-import "google/protobuf/timestamp.proto";
-option go_package = "openRoute/orpb";
+option go_package = "./proto;proto";
+package types;
 
 message Uuid {
   string value = 1;
 }
+
+message Empty {}
 
 // Core route structure
 message Route {
@@ -33,14 +34,5 @@ message Proposal {
 message User {
   Uuid id = 1;
   string username = 2;
-  google.protobuf.Timestamp created_at = 3;
-}
-
-message RegisterUserReq {
-  string username = 1;
-}
-
-message CreateProposalReq {
-  Route route = 1;
-  Uuid user_id = 2;
+  //google.protobuf.Timestamp created_at = 3;
 }
