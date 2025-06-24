@@ -10,6 +10,8 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
+        # protoc-gen-js has build issues on macOS with newer Clang
+        protocJsPackage = if pkgs.stdenv.isDarwin then [] else [ pkgs.protoc-gen-js ];
       in {
         devShells.default = pkgs.mkShell {
           buildInputs = [
@@ -19,12 +21,11 @@
             pkgs.protoc-gen-go
             pkgs.protoc-gen-go-grpc
             pkgs.protoc-gen-grpc-web
-            pkgs.protoc-gen-js
             pkgs.grpc-tools
             pkgs.buf
             pkgs.openssl
             pkgs.pkg-config
-          ];
+          ] ++ protocJsPackage;
 
           PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig";
 

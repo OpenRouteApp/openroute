@@ -19,3 +19,7 @@ web/descriptors/
 web/*.bundle.js
 web/*.map
 web/*.cache/
+
+# === Environment Variables ===
+.envrc
+.direnv/
