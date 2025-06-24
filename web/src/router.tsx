@@ -11,26 +11,26 @@ import { createConnectTransport } from "@connectrpc/connect-web";
 // to show what's possible with the current APIs.
 
 export function createRouter() {
-  const finalTransport = createConnectTransport({
-    baseUrl: "http://localhost:8080",
-  });
+	const finalTransport = createConnectTransport({
+		baseUrl: "http://localhost:8080",
+	});
 
-  const queryClient = new QueryClient();
+	const queryClient = new QueryClient();
 
-  return routerWithQueryClient(
-    createTanStackRouter({
-      routeTree,
-      context: { queryClient },
-      defaultPreload: "intent",
-      defaultErrorComponent: DefaultCatchBoundary,
-      defaultNotFoundComponent: () => <NotFound />,
-    }),
-    queryClient
-  );
+	return routerWithQueryClient(
+		createTanStackRouter({
+			routeTree,
+			context: { queryClient },
+			defaultPreload: "intent",
+			defaultErrorComponent: DefaultCatchBoundary,
+			defaultNotFoundComponent: () => <NotFound />,
+		}),
+		queryClient,
+	);
 }
 
 declare module "@tanstack/react-router" {
-  interface Register {
-    router: ReturnType<typeof createRouter>;
-  }
+	interface Register {
+		router: ReturnType<typeof createRouter>;
+	}
 }
